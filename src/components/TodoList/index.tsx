@@ -1,5 +1,6 @@
 import { useTodoStore } from "../../hooks/useTodoStore";
 import TodoItem from "../TodoItem";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export default function TodoList() {
   // Store actions and state. We need to call these actions seperately because zustand documentation says that
@@ -7,6 +8,9 @@ export default function TodoList() {
   const todos = useTodoStore((state) => state.todos);
   const toggleAllTodos = useTodoStore((state) => state.toggleAllTodos);
   const activeFilter = useTodoStore((state) => state.activeFilter);
+
+  // This is used for auto animation.
+  const [parent] = useAutoAnimate();
 
   // Filter todos based on the active filter.
   const filteredTodos = todos.filter((todo) => {
@@ -35,7 +39,7 @@ export default function TodoList() {
         onChange={handleToggleAll}
       />
       <label htmlFor="toggle-all" />
-      <ul className="todo-list">
+      <ul className="todo-list" ref={parent}>
         {filteredTodos.map((todo) => (
           <TodoItem key={todo.id} todo={todo} />
         ))}
