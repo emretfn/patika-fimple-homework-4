@@ -6,6 +6,19 @@ export default function TodoList() {
   const activeTodoCount = useTodoStore((state) => state.activeTodoCount);
   const todos = useTodoStore((state) => state.todos);
   const toggleAllTodos = useTodoStore((state) => state.toggleAllTodos);
+  const activeFilter = useTodoStore((state) => state.activeFilter);
+
+  // Filter todos based on the active filter.
+  const filteredTodos = todos.filter((todo) => {
+    switch (activeFilter) {
+      case "Active":
+        return !todo.completed;
+      case "Completed":
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
 
   // This function is called when the user clicks on the toggle all checkbox.
   const handleToggleAll = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +36,7 @@ export default function TodoList() {
       />
       <label htmlFor="toggle-all" />
       <ul className="todo-list">
-        {todos.map((todo) => (
+        {filteredTodos.map((todo) => (
           <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>
