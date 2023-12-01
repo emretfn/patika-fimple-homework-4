@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useTodoStore } from "../hooks/useTodoStore";
+import { v4 as uuid } from "uuid";
 
 export default function Header() {
   const [todo, setTodo] = useState<string>("");
+  const addTodo = useTodoStore((state) => state.addTodo);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return;
@@ -9,7 +12,11 @@ export default function Header() {
     const title = todo.trim();
 
     if (title) {
-      //TODO: use context to add todo
+      addTodo({
+        id: uuid(),
+        title,
+        completed: false,
+      });
       setTodo("");
     }
   };
